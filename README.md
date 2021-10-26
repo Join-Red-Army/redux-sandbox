@@ -12,26 +12,30 @@ Reducer должна быть чистой функцией:
 Это помогает в крупных приложениях.
 
 ``` js
+//Создание
 const reducer = (state, action) => newState
 
-state    текущее состояние
-action   обычный JS-объект, в котором описано действие, которое нужно совершить
+//state - текущее состояние
+//action  - обычный JS-объект, в котором свойство type описывает действие, которое нужно совершить.
+//Кроме обязательного свойства type, объект action также может содержать любые другие дополнительные свойства. Обычно поле с доп. Параметрами называется payload.
 
-
-
+// Пример
 const reducer = (state = 0, action) => {
   switch (action.type) {
+    case 'RND':
+      return state + action.payload;
+      
     case 'INC':
       return state + 1;
+
+    case 'DEC':
+      return state - 1;
+
     default:
       return state;
   }
 };
 
-let state = reducer(undefined, {});    // 0
-
-state = reducer(state, {type: 'INC'}); // 1
-console.log(state);
 ```
 
 ## Redux Store
@@ -63,4 +67,23 @@ const store = createStore(reducer);
 .replaceReducer(nextReducer)
 // ну понятно
 ```
+
+## Action creator
+Любые данные типа событий интерфейса, сетевые запросы и др. должны в конечном итоге отправляться как действия (dispatched as actions).
+
+Действия – это простой JS объект с обязательным полем type.
+Type могут быть строками или символами, но строки предпочтительнее потому что их можно сериализировать.
+
+Action creator
+Это функция, которая создаёт объекты action.
+Чтобы постоянно не вбивать строки вручную, можно создать функции, которые будут их возвращать.
+ 
+```js
+const inc = () => ( {type: 'INC'} );
+const dec = () => ( {type: 'DEC'} );
+const rnd = (payload) => ( {type: 'RND', payload} );
+```
+
+## Структура проекта
+Ни reducer, ни actions не зависят от сторонних библиотек. Их лучше вынести в отдельные файлы, а потом импортировать, куда требуется.
 
