@@ -4,7 +4,7 @@ const reducer = (state = 0, action) => {
   switch (action.type) {
     case 'RND':
       return state + action.payload;
-      
+
     case 'INC':
       return state + 1;
 
@@ -18,18 +18,24 @@ const reducer = (state = 0, action) => {
 
 const store = createStore(reducer);
 
+const inc = () => ( {type: 'INC'} );
+const dec = () => ( {type: 'DEC'} );
+const rnd = (payload) => ( {type: 'RND', payload} );
+
+
+
 // увеличить
 document
   .getElementById('inc')
   .addEventListener('click', () => {
-    store.dispatch({type: 'INC'});
+    store.dispatch(inc());
   });
 
 // уменьшить
 document
   .getElementById('dec')
   .addEventListener('click', () => {
-    store.dispatch({type: 'DEC'});
+    store.dispatch(dec());
   });
 
 // случайное число
@@ -37,7 +43,7 @@ document
   .getElementById('rnd')
   .addEventListener('click', () => {
     const payload = Math.floor(Math.random() * 10);
-    store.dispatch({type: 'RND', payload});
+    store.dispatch(rnd(payload));
   });
 
 // обновить значение
