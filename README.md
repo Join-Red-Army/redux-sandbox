@@ -87,3 +87,26 @@ const rnd = (payload) => ( {type: 'RND', payload} );
 ## Структура проекта
 Ни reducer, ни actions не зависят от сторонних библиотек. Их лучше вынести в отдельные файлы, а потом импортировать, куда требуется.
 
+## bindActionCreators
+Связывает функцию (action creator) с функцией dispatch.
+В качестве результата вернёт объект. Его ключи – названия обёрнутых функций. 
+Можно сразу деструктуризировать этот объект.
+
+```js
+import { createStore, bindActionCreators } from 'redux';
+
+bindActionCreators(actionCreators, dispatch)
+
+//fooA, fooB – это новые произвольные названия обёрнутых функций 
+const { fooA, fooB } = bindActionCreators({
+  fooA: actionCreatorA,
+  fooB: actionCreatorA,
+  }, dispatch);
+
+// пример из кода
+const { incDispatch, decDispatch, rndDispatch } = bindActionCreators({
+  incDispatch: inc,
+  decDispatch: dec,
+  rndDispatch: rnd
+}, dispatch);
+```
