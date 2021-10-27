@@ -110,3 +110,19 @@ const { incDispatch, decDispatch, rndDispatch } = bindActionCreators({
   rndDispatch: rnd
 }, dispatch);
 ```
+
+## React + Redux
+```js
+// 1. В компонент React передаются все нужные функции для отрисовки и вычисления значений.
+// 2. Поскольку нет State, компонент будет обновляться через store.subscribe(update).
+// 3. Первый запуск update делается вручную.
+
+const update = () => {
+  ReactDom.render( <Counter {…свойства} />, document.getElementById('root'));
+};
+
+// первый запуск - вручную
+update();
+// повторные обновления делает store
+store.subscribe(update);
+```
