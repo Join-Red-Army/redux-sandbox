@@ -111,7 +111,7 @@ const { incDispatch, decDispatch, rndDispatch } = bindActionCreators({
 }, dispatch);
 ```
 
-## React + Redux
+## React и обычный Redux
 ```js
 // 1. В компонент React передаются все нужные функции для отрисовки и вычисления значений.
 // 2. Поскольку нет State, компонент будет обновляться через store.subscribe(update).
@@ -125,4 +125,63 @@ const update = () => {
 update();
 // повторные обновления делает store
 store.subscribe(update);
+```
+
+## Библиотека react-redux
+React-redux – библиотека, которая упрощает интеграцию в react.
+
+### <Provider>
+Компонент даёт возможность передавать store в компоненты внутри себя. 
+Работает через обычный контекст: нужно обернуть в него компоненты, которым нужен store.
+Он из коробки реализует подписку на изменение store (компонент будет об этом узнавать) и делает так, чтобы приложение автоматом обновлялось, когда store изменён.
+Обычно в него оборачивается весь <App /> в функции ReactDOM.render()
+```js
+import { Provider } from 'react-redux';
+
+const store = createStore(reducer);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />, 
+  </Provider>,
+  document.getElementById('root')
+);
+```
+
+### connect()
+компонент высшего порядка, который передаёт значения из store в нужный react-компонент.
+Функция создаёт новый компонент. Этот новый компонент будет брать из store нужные данные и передавать их в react-компонент.
+Чтобы он знал, какие именно данные надо брать из store для конкретного компонента, используются конфигурации.
+```js
+// Импорт
+import { connect } from 'react-redux';
+
+// Использование
+function connect(mapStateToProps?, mapDispatchToProps?, mergeProps?, options?)
+```
+
+#### mapStateToProps
+Для чтения из store.
+Получает в качестве аргумента текущий state (из redux store) и возвращает те свойства, которые нужны компоненту в качестве props.
+В примере ниже из state будут вытащены значения state.name и state.age и переданы в react-компонент как name и age соответственно.
+```js
+const mapStateToProps = (state) => {
+  return { 
+    name: state.name, 
+    age: state.age };
+};
+export default connect(mapStateToProps)(Counter);
+```
+
+#### mapDispatchToProps
+Для обновления (dispatch) store.
+Получает в качестве аргумента dispatch.
+Возвращает объект. Ключи – имена для передаваемых в пропсы функций, а значения – сами функции.
+Созданные функции будут переданы в компонент. Таким образом, компонент сможет обновлять state.
+```js
+const mapDispatchToProps = (dispatch) => {
+  return {
+    inc: () => dispatch({type: 'INC'})
+  }
+}
 ```
